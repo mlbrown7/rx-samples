@@ -15,6 +15,28 @@ namespace WpfSamples.ViewModels
         {
             Contacts = new ReactiveList<Contact> { ChangeTrackingEnabled = true };
             Contacts.AddRange(GetContactList());
+
+            EditContactCommand = ReactiveCommand.Create<Contact>((contact) =>
+            {
+                contact.IsEditing = true;
+                contact.IsNotEditing = false;
+            });
+
+            CancelEditContactCommand = ReactiveCommand.Create<Contact>((contact) =>
+            {
+                contact.IsEditing = false;
+                contact.IsNotEditing = true;
+            });
+
+            SaveContactCommand = ReactiveCommand.Create<Contact>((contact) =>
+            {
+                contact.Name = contact.NameEdit;
+                contact.Age = contact.AgeEdit;
+                MessageBox.Show($"Saved changes for {contact.Name}");
+
+                contact.IsEditing = false;
+                contact.IsNotEditing = true;
+            });
         }
 
         ReactiveList<Contact> _contacts;
@@ -24,39 +46,35 @@ namespace WpfSamples.ViewModels
             set => this.RaiseAndSetIfChanged(ref _contacts, value);
         }
 
+        public ReactiveCommand EditContactCommand { get; set; }
+        public ReactiveCommand CancelEditContactCommand { get; set; }
+        public ReactiveCommand SaveContactCommand { get; set; }
+
         private List<Contact> GetContactList()
         {
             var list = new List<Contact>();
-            list.Add(new Contact { Id = 1, Name = "Bob Parr", Age = 37 });
-            list.Add(new Contact { Id = 1, Name = "Han Solo", Age = 32 });
-            list.Add(new Contact { Id = 1, Name = "Like Skywalker", Age = 24 });
-            list.Add(new Contact { Id = 1, Name = "Steve Rogers", Age = 22 });
+            list.Add(new Contact(1, "Bob Parr", 37));
+            list.Add(new Contact(1, "Han Solo", 32));
+            list.Add(new Contact(1, "Luke Skywalker", 24));
+            list.Add(new Contact(1, "Steve Rogers", 22));
             return list;
         }
-
-        public Contact SelectedContact { get; set; }
-
     }
 
 
     public class Contact : ReactiveObject
     {
-        public Contact()
+        public Contact(int id, string name, int age)
         {
             IsEditing = false;
             IsNotEditing = true;
 
-            EditContactCommand = ReactiveCommand.Create(() =>
-            {
-                this.IsEditing = true;
-                this.IsNotEditing = false;
-            });
-
-            CancelEditCommand = ReactiveCommand.Create(() =>
-            {
-                this.IsEditing = false;
-                this.IsNotEditing = true;
-            });
+            //set properties
+            Id = id;
+            Name = name;
+            NameEdit = name;
+            Age = age;
+            AgeEdit = age;
         }
 
         private int _id;
@@ -107,9 +125,5 @@ namespace WpfSamples.ViewModels
             get => _isNotEditing;
             set => this.RaiseAndSetIfChanged(ref _isNotEditing, value);
         }
-
-        public ReactiveCommand EditContactCommand { get; set; }
-        public ReactiveCommand CancelEditCommand { get; set; }
-
     }
 }

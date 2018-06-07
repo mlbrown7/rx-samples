@@ -23,7 +23,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ListView Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding Contacts}" SelectedItem="SelectedContact" BorderThickness="1" Width="650">
+        <ListView Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding Contacts}" BorderThickness="1" Width="650">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Height" Value="30" />
@@ -34,16 +34,33 @@
             <ListView.View>
                 <GridView ColumnHeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
                     <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Id, Mode=TwoWay}" Header="Id" />
-                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Name, Mode=TwoWay}" Header="Name" />
-                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Age, Mode=TwoWay}" Header="Age" />
-                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=IsEditing, Mode=TwoWay}" Header="IsEditing" />
+                    <GridViewColumn Width="100" Header="Name">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Path=Name, Mode=OneWay}" Visibility="{Binding IsNotEditing, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
+                                    <TextBox Text="{Binding Path=NameEdit, Mode=TwoWay}" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="100" Header="Age">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Path=Age, Mode=OneWay}" Visibility="{Binding IsNotEditing, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
+                                    <TextBox Text="{Binding Path=AgeEdit, Mode=TwoWay}" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Width="150">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="Edit" Visibility="{Binding IsNotEditing, Converter={StaticResource BooleanToVisibilityConverter}}" Command="{Binding EditContactCommand}"></Button>
-                                    <Button Content="Save" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,0,10,0"></Button>
-                                    <Button Content="Cancel" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}" Command="{Binding CancelEditCommand}"></Button>
+                                    <Button Content="Edit" Visibility="{Binding IsNotEditing, Converter={StaticResource BooleanToVisibilityConverter}}" Command="{Binding DataContext.EditContactCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding}"></Button>
+                                    <Button Content="Save" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}" Command="{Binding DataContext.SaveContactCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding}" Margin="0,0,10,0"></Button>
+                                    <Button Content="Cancel" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}" Command="{Binding DataContext.CancelEditContactCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding}"></Button>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
