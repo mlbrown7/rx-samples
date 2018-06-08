@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfSamples.ViewModels"
         mc:Ignorable="d"
-        Title="GridEditSample" Height="450" Width="800">
+        Title="GridEditSample" Height="450" Width="900">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
@@ -23,7 +23,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ListView Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding Contacts}" BorderThickness="1" Width="650">
+        <ListView Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding Contacts}" BorderThickness="1" Width="850">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Height" Value="30" />
@@ -34,22 +34,37 @@
             <ListView.View>
                 <GridView ColumnHeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
                     <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Id, Mode=TwoWay}" Header="Id" />
-                    <GridViewColumn Width="100" Header="Name">
+                    <GridViewColumn Width="200" Header="Name">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
                                     <TextBlock Text="{Binding Path=Name, Mode=OneWay}" Visibility="{Binding IsNotEditing, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
-                                    <TextBox Text="{Binding Path=NameEdit, Mode=TwoWay}" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
+                                    <TextBox Name="nameEditTextBox" Width="100" HorizontalAlignment="Left" Text="{Binding Path=NameEdit, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <Validation.ErrorTemplate>
+                                            <ControlTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <AdornedElementPlaceholder x:Name="nameEditTextBox"/>
+                                                    <ItemsControl ItemsSource="{Binding}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+                                            </ControlTemplate>
+                                        </Validation.ErrorTemplate>
+                                    </TextBox>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="100" Header="Age">
+                    <GridViewColumn Width="200" Header="Age">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
                                     <TextBlock Text="{Binding Path=Age, Mode=OneWay}" Visibility="{Binding IsNotEditing, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
-                                    <TextBox Text="{Binding Path=AgeEdit, Mode=TwoWay}" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
+                                    <TextBox Width="100" HorizontalAlignment="Left" Text="{Binding Path=AgeEdit, Mode=TwoWay}" Visibility="{Binding IsEditing, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBox>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

@@ -84,7 +84,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\Contact.cs" />
     <Compile Include="ViewModels\GridEditSampleViewModel.cs" />
+    <Compile Include="Views\FormValidationSampleView.xaml.cs">
+      <DependentUpon>FormValidationSampleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\GridEditSample.xaml.cs">
       <DependentUpon>GridEditSample.xaml</DependentUpon>
     </Compile>
@@ -101,6 +105,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\FormValidationSampleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GridEditSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
