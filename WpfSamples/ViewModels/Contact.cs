@@ -85,9 +85,6 @@ namespace WpfSamples.ViewModels
 
         //Validation Methods
 
-        
-
-
         private void ValidateNameEdit(Contact contact)
         {
             var errors = new List<string>();
